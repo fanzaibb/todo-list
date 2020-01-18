@@ -23,11 +23,14 @@ const Todo = require('./models/todo')
 
 // Todo 首頁
 app.get('/', (req, res) => {
-  res.render('index')
+  Todo.find((err, todos) => {
+    if(err) return console.log(err)
+    return res.render('index', { todos: todos })
+  })
 })
 // 列出全部 Todo
 app.get('/todos', (req, res) => {
-  res.send('列出所有 Todo')
+  return res.redirect('/')
 })
 // 新增一筆 Todo 頁面
 app.get('/todos/new', (req, res) => {
