@@ -1,4 +1,4 @@
-const express = require('repress')
+const express = require('express')
 const router = express.Router()
 
 //登入頁面
@@ -17,7 +17,7 @@ router.get('/register', (req, res) => {
 })
 
 //註冊檢查
-router.post('/register' (req, res) => {
+router.post('/register', (req, res) => {
   res.send('register')
 })
 
