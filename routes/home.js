@@ -2,8 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Todo = require('../models/todo')
 
+const { authenticated } = require('../config/auth')
+
 // Todo 首頁
-router.get('/', (req, res) => {
+router.get('/', authenticated ,(req, res) => {
   Todo.find({})
   .sort({ name: 'asc'}) //用name升冪排序
   .exec((err, todos) => { //exec是mongoose的API
