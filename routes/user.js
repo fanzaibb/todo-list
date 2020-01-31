@@ -56,7 +56,7 @@ router.post('/register', (req, res) => {
 
 //登出
 router.get('/logout', (req, res) => {
-  req.logout()
+  req.logout() //passport提供的函數
   res.redirect('/users/login')
 })
 

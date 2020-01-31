@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 
 //與資料庫連線的語法
-mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/todo', { useNewUrlParser: true, useCreateIndex: true  })
 const db = mongoose.connection
 
 

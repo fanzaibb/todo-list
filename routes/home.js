@@ -6,7 +6,7 @@ const { authenticated } = require('../config/auth')
 
 // Todo 首頁
 router.get('/', authenticated ,(req, res) => {
-  Todo.find({})
+  Todo.find({ userId: req.user._id })
   .sort({ name: 'asc'}) //用name升冪排序
   .exec((err, todos) => { //exec是mongoose的API
     if(err) return console.log(err)
