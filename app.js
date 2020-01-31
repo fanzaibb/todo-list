@@ -44,11 +44,18 @@ db.once('open', () => {
 })
 
 
-
+//登入後取得使用者的資訊，方便用於view
+app.use((req, res, next) => {
+  res.locals.user = req.user
+  res.locals.isAuthenticated = req.isAuthenticated()
+  next()
+})
 
 app.use('/', require('./routes/home'))
 app.use('/todos', require('./routes/todo'))
 app.use('/users', require('./routes/user'))
+
+
 
 app.listen(3000, () => {
   console.log('App is running!')
