@@ -10,6 +10,7 @@ const methodOverride = require('method-override')
 const session = require('express-session')
 const passport = require('passport')
 const Todo = require('./models/todo')
+const flash = require('connect-flash')
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -46,11 +47,14 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-
+app.use(flash())
 //登入後取得使用者的資訊，方便用於view
 app.use((req, res, next) => {
   res.locals.user = req.user
   res.locals.isAuthenticated = req.isAuthenticated()
+
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.warning_msg = req.flash('warning_msg')
   next()
 })
 

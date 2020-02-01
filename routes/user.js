@@ -25,6 +25,53 @@ router.get('/register', (req, res) => {
 //註冊檢查
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body
+  let errors = []
+  if (!name || !email || !password || !password2) {
+    errors.push({ message: '所有欄位都是必填' })
+  }
+  if (password !== password2) {
+    errors.push({ message: '密碼輸入錯誤'})
+  }
+
+  if (errors.length > 0) {
+    res.render('register', {
+      errors,
+      name,
+      email,
+      password,
+      password2
+    })
+  } else {
+    User.findOne({ email: email }).then(user => {
+      if (user) {
+        errors.push({ messsage: '這個Email已經註冊過了'})
+        res.render('register', {
+          errors,
+          name,
+          email,
+          password,
+          password2
+        })
+      } else {
+        const newUser = new User({
+          name,
+          email,
+          password
+        })
+        bcrypt.genSalt(10, (err, salt) =>
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err
+          newUser.password = hash
+          newUser
+            .save()
+            .then(user => {
+              res.redirect('/')
+            })
+            .catch(err => console.log(err))
+        }))
+      }
+    })
+  }
   // aka const name = req.body.name
   User.findOne({ email: email }) //findOne為mongoose提供的方法
       .then(user => { //若findOne執行無誤，繼續執行then裡的callback(?)
@@ -65,6 +112,7 @@ router.post('/register', (req, res) => {
 //登出
 router.get('/logout', (req, res) => {
   req.logout() //passport提供的函數
+  req.flash('success_msg', '你已經成功登出')
   res.redirect('/users/login')
 })
 
